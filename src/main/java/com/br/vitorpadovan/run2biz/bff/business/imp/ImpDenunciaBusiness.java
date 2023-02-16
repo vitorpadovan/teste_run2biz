@@ -55,29 +55,29 @@ public class ImpDenunciaBusiness implements DenunciaBusiness {
 
 	private void gerarMapasDeModelos() {
 		var denunciaMap = modelMapper.createTypeMap(DenunciaRequest.class, Denuncia.class);
-		denunciaMap.addMapping(s -> s.getDenuncia().getTitulo(), Denuncia::setTitulo);
-		denunciaMap.addMapping(s -> s.getDenuncia().getDescricao(), Denuncia::setDescricao);
+		denunciaMap.addMapping(origem -> origem.getDenuncia().getTitulo(), Denuncia::setTitulo);
+		denunciaMap.addMapping(origem -> origem.getDenuncia().getDescricao(), Denuncia::setDescricao);
 		var denunciaResponseMap = modelMapper.createTypeMap(Denuncia.class, DenunciaResponse.class);
-		denunciaResponseMap.addMapping(s -> s.getCodDenuncia(), DenunciaResponse::setId);
+		denunciaResponseMap.addMapping(origem -> origem.getCodDenuncia(), DenunciaResponse::setId);
 	}
 
 	@Override
 	public DenunciaResponse salvarDenuncia(DenunciaRequest request)
 			throws GenericException {
-		Denuncia d = modelMapper.map(request, Denuncia.class);
-		denunciaNasProximidades = this.getDenunciaPorGeoLocalizacao(d.getLatitude(), d.getLongitude());
+		Denuncia denuncia = modelMapper.map(request, Denuncia.class);
+		denunciaNasProximidades = this.getDenunciaPorGeoLocalizacao(denuncia.getLatitude(), denuncia.getLongitude());
 		log.info("Processando denuncia a denuncia {} de {} e encontramos {} denuncias próximas",
 				request.getDenuncia().getTitulo(),
 				request.getDenunciante().getNome(), denunciaNasProximidades.size());
 		var pessoa = denuncianteB.getPessoaPorCpfESalva(request.getDenunciante().getNome(),
 				request.getDenunciante().getCpf());
-		d.setDenunciante(pessoa);
-		if (validaDenunciaJaFeita(d))
-			throw new DenunciaJaFeitaExcption("Denuncia já feita pelo CPF " + d.getDenunciante().getCpf());
+		denuncia.setDenunciante(pessoa);
+		if (validaDenunciaJaFeita(denuncia))
+			throw new DenunciaJaFeitaExcption("Denuncia já feita pelo CPF " + denuncia.getDenunciante().getCpf());
 		Endereco endereco = tratarEndereco(request.getLatitude(), request.getLongitude());
-		d.setEndereco(endereco);
-		d = repo.save(d);
-		return getResponse(d);
+		denuncia.setEndereco(endereco);
+		denuncia = repo.save(denuncia);
+		return getResponse(denuncia);
 	}
 
 	private DenunciaResponse getResponse(Denuncia d) {
@@ -86,9 +86,9 @@ public class ImpDenunciaBusiness implements DenunciaBusiness {
 
 	private boolean validaDenunciaJaFeita(Denuncia d) {
 		log.info("Validando se a denuncia já foi feita");
-		var testes = denunciaNasProximidades.stream()
+		var denunciasDoMesmoCpf = denunciaNasProximidades.stream()
 				.filter(s -> s.getDenunciante().getCpf().compareTo(d.getDenunciante().getCpf()) == 0).findAny();
-		if (testes.isPresent())
+		if (denunciasDoMesmoCpf.isPresent())
 			return true;
 		return false;
 	}

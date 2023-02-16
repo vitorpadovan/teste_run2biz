@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.br.vitorpadovan.run2biz.bff.business.contracts.GeolocatorBusiness;
-import com.br.vitorpadovan.run2biz.bff.business.contracts.mapquest.MapQuestRequest;
+import com.br.vitorpadovan.run2biz.bff.controller.contracts.request.mapquestapi.MapQuestRequest;
 import com.br.vitorpadovan.run2biz.bff.controller.contracts.response.mapquestapi.LatLng;
 import com.br.vitorpadovan.run2biz.bff.controller.contracts.response.mapquestapi.Location;
 import com.br.vitorpadovan.run2biz.bff.controller.contracts.response.mapquestapi.MapResponse;
@@ -38,11 +38,11 @@ public class ImpGeolocatorBusiness implements GeolocatorBusiness {
 
 	private void gerarMapasDeModelos() {
 		var teste = map.createTypeMap(Location.class, Endereco.class);
-		teste.addMapping(s -> s.getAdminArea1(), Endereco::setPais);
-		teste.addMapping(s -> s.getAdminArea3(), Endereco::setEstado);
-		teste.addMapping(s -> s.getAdminArea5(), Endereco::setCidade);
-		teste.addMapping(s -> s.getAdminArea6(), Endereco::setBairro);
-		teste.addMapping(s -> s.getStreet(), Endereco::setLogradouro);
+		teste.addMapping(origem -> origem.getAdminArea1(), Endereco::setPais);
+		teste.addMapping(origem -> origem.getAdminArea3(), Endereco::setEstado);
+		teste.addMapping(origem -> origem.getAdminArea5(), Endereco::setCidade);
+		teste.addMapping(origem -> origem.getAdminArea6(), Endereco::setBairro);
+		teste.addMapping(origem -> origem.getStreet(), Endereco::setLogradouro);
 	}
 
 	// Verificar exception melhor
@@ -59,11 +59,11 @@ public class ImpGeolocatorBusiness implements GeolocatorBusiness {
 	@Override
 	public Endereco pesquisarEnderecoNoMapQuest(double latitude, double longitude) throws EnderecoNaoEncontradoException {
 		RestTemplate r = new RestTemplate();
-		var m = new MapQuestRequest(new Localizacao(new LatLng(latitude, longitude)));
-		MapResponse mapResponse = r.postForObject(url, m, MapResponse.class);
+		var mapRequest = new MapQuestRequest(new Localizacao(new LatLng(latitude, longitude)));
+		MapResponse mapResponse = r.postForObject(url, mapRequest, MapResponse.class);
 		try {
-			Endereco e = this.extrairEndereco(mapResponse);
-			return enderecoRepo.save(e);
+			Endereco endereco = this.extrairEndereco(mapResponse);
+			return enderecoRepo.save(endereco);
 		} catch (EnderecoNaoEncontradoException ex) {
 			log.error(ex.getMessage());
 			throw ex;

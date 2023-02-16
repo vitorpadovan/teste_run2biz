@@ -1,4 +1,4 @@
-package com.br.vitorpadovan.run2biz.bff.business.contracts.mapquest;
+package com.br.vitorpadovan.run2biz.bff.controller.contracts.request.mapquestapi;
 
 import com.br.vitorpadovan.run2biz.bff.model.Localizacao;
 

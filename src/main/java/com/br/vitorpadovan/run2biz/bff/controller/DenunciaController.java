@@ -24,7 +24,7 @@ public class DenunciaController {
 		this.business = business;
 	}
 
-	@PostMapping("/v1/teste")
+	@PostMapping("/v1/denuncias")
 	public ResponseEntity<Object> teste(@RequestBody DenunciaRequest teste) {
 		try {
 			return ResponseEntity.ok(business.salvarDenuncia(teste));
