@@ -1,0 +1,24 @@
+version: '3.3'
+services:
+  apiservice:
+    build: ../.
+    depends_on:
+      - postgressrv
+    ports:
+      - '8080:8080'
+    environment:
+      - fa_db_serv=postgressrv
+      - 'fa_db_user=${USUARIO}'
+      - 'fa_db_pass=${SENHA}'
+      - 'fa_db_data=${BANCO}'
+      - 'fa_map_quest=${KEY}'
+  postgressrv:
+    image: 'postgres:latest'
+    ports:
+      - '5432:5432'
+    environment:
+      - 'POSTGRES_PASSWORD=${SENHA}'
+      - 'POSTGRES_USER=${USUARIO}'
+      - 'POSTGRES_DB=${BANCO}'
+    volumes:
+      - '${PASTA_DADOS}:/var/lib/postgresql/data'
