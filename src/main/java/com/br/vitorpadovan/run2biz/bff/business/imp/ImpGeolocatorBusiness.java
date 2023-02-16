@@ -22,7 +22,6 @@ public class ImpGeolocatorBusiness implements GeolocatorBusiness {
 
 	private EnderecoRepo enderecoRepo;
 
-	// TODO remover a key
 	private String url = "http://www.mapquestapi.com/geocoding/v1/reverse?key=fkck2Ir3GyxWoyyDZTtRQIBAmcvzVIAA";
 
 	private ModelMapper map;
@@ -37,12 +36,12 @@ public class ImpGeolocatorBusiness implements GeolocatorBusiness {
 	}
 
 	private void gerarMapasDeModelos() {
-		var teste = map.createTypeMap(Location.class, Endereco.class);
-		teste.addMapping(origem -> origem.getAdminArea1(), Endereco::setPais);
-		teste.addMapping(origem -> origem.getAdminArea3(), Endereco::setEstado);
-		teste.addMapping(origem -> origem.getAdminArea5(), Endereco::setCidade);
-		teste.addMapping(origem -> origem.getAdminArea6(), Endereco::setBairro);
-		teste.addMapping(origem -> origem.getStreet(), Endereco::setLogradouro);
+		var typeMap = map.createTypeMap(Location.class, Endereco.class);
+		typeMap.addMapping(origem -> origem.getAdminArea1(), Endereco::setPais);
+		typeMap.addMapping(origem -> origem.getAdminArea3(), Endereco::setEstado);
+		typeMap.addMapping(origem -> origem.getAdminArea5(), Endereco::setCidade);
+		typeMap.addMapping(origem -> origem.getAdminArea6(), Endereco::setBairro);
+		typeMap.addMapping(origem -> origem.getStreet(), Endereco::setLogradouro);
 	}
 
 	// Verificar exception melhor
