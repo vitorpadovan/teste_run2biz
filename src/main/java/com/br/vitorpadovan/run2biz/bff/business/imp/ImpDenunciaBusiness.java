@@ -85,15 +85,15 @@ public class ImpDenunciaBusiness implements DenunciaBusiness {
 	}
 
 	private boolean validaDenunciaJaFeita(Denuncia d) {
-		// log.info("Validando se a denuncia já foi feita");
-		var testes = denunciaNasProximidades.stream().filter(s -> s.getDenunciante() == d.getDenunciante()).findAny();
+		log.info("Validando se a denuncia já foi feita");
+		var testes = denunciaNasProximidades.stream()
+				.filter(s -> s.getDenunciante().getCpf().compareTo(d.getDenunciante().getCpf()) == 0).findAny();
 		if (testes.isPresent())
 			return true;
 		return false;
 	}
 
 	private Endereco tratarEndereco(double latitude, double longitude) throws EnderecoNaoEncontradoException {
-		// TODO implementar denuncia correta
 		if (denunciaNasProximidades.size() > 0) {
 			return denunciaNasProximidades.get(0).getEndereco();
 		}

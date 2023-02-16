@@ -8,7 +8,6 @@ public class GenericException extends Exception implements BasicInfoErrors {
 
 	public GenericException() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public GenericException(
@@ -17,26 +16,22 @@ public class GenericException extends Exception implements BasicInfoErrors {
 			boolean enableSuppression,
 			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
-		// TODO Auto-generated constructor stub
 	}
 
 	public GenericException(
 			String message,
 			Throwable cause) {
 		super(message, cause);
-		// TODO Auto-generated constructor stub
 	}
 
 	public GenericException(
 			String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 	public GenericException(
 			Throwable cause) {
 		super(cause);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

@@ -25,13 +25,10 @@ public class DenunciaController {
 	}
 
 	@PostMapping("/v1/teste")
-	// TODO adicionar EntityResponse
 	public ResponseEntity<Object> teste(@RequestBody DenunciaRequest teste) {
-		// TODO adicionar cache
 		try {
 			return ResponseEntity.ok(business.salvarDenuncia(teste));
 		} catch (GenericException ex) {
-			// TODO colocar o erro corretamente
 			var erroApi = ErrorApi.builder().code(ex.getBasicCode()).message(ex.getBasicMessage()).build();
 			var errorResponse = ErrorResponse.builder().error(erroApi).build();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);

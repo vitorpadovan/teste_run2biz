@@ -3,13 +3,11 @@ package com.br.vitorpadovan.run2biz.bff.controller.contracts.request;
 import com.br.vitorpadovan.run2biz.bff.model.dto.DenunciaDto;
 import com.br.vitorpadovan.run2biz.bff.model.dto.PessoaDto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Builder;
+import lombok.Data;
 
-@ToString
-@Getter
-@Setter
+@Data
+@Builder
 public class DenunciaRequest {
 
 	private double latitude;
